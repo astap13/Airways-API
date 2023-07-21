@@ -1,15 +1,28 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import { getPlain, addPlain } from './src/plain.js';
+require('dotenv').config();
 
+const express = require('express');
+const mongoose = require('mongoose');
+const mongoString = process.env.DATABASE_URL;
+const routes = require('./routes/routes');
+const bodyParser = require('body-parser');
+
+
+
+mongoose.connect(mongoString);
+const database = mongoose.connection;
+
+database.on('error', (error) => {
+    console.log(error)
+})
+
+database.once('connected', () => {
+    console.log('Database Connected');
+})
 const app = express();
-const PORT = 3333;
-
 app.use(bodyParser.json());
 
-app.get('/plain', getPlain);
-app.post('/plain', addPlain);
+app.use('/', routes)
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+app.listen(3000, () => {
+    console.log(`Server Started at ${3000}`)
+})
