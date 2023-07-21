@@ -13,12 +13,12 @@ router.post('/post', async (req, res) => {
   const freeSeats = Math.floor(Math.random() * seats) + 1;
   const price = Math.floor(Math.random() * 1000) + 1;
   const flightNumber = generateFlightNumber();
-  const time = generateRandomTime();
+  const time = generateRandomTime(date); // Передаем дату из запроса в функцию
 
   const data = new Model({
     from: from,
     to: to,
-    date: date,
+    date: time.from,
     seats: seats,
     freeSeats: freeSeats,
     price: price,
@@ -51,10 +51,12 @@ function generateFlightNumber() {
   return flightNumber;
 }
 
-// Generate a random time
-function generateRandomTime() {
-  const startTime = new Date();
-  const endTime = new Date();
+// Generate a random time based on the input date
+function generateRandomTime(date) {
+  const startTime = new Date(date);
+  startTime.setHours(startTime.getHours() + Math.floor(Math.random() * 12) + 1);
+
+  const endTime = new Date(startTime);
   endTime.setHours(startTime.getHours() + Math.floor(Math.random() * 12) + 1);
 
   return {
@@ -62,6 +64,7 @@ function generateRandomTime() {
     to: endTime,
   };
 }
+
 
 // Get all Method
 router.get('/getAll', async (req, res) => {
