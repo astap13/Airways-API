@@ -22,8 +22,14 @@ database.once('connected', () => {
 const app = express();
 app.use(bodyParser.json());
 
+const corsOptions = {
+    origin: 'http://localhost:4200',
+    optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+  };
+  
+  app.use(cors(corsOptions));
+
 app.use('/', routes);
-app.use(cors());
 
 app.listen(3000, () => {
     console.log(`Server Started at ${3000}`)
