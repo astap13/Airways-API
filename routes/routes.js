@@ -8,12 +8,11 @@ module.exports = router;
 router.post('/post', async (req, res) => {
   const { from, to, date } = req.body;
 
-  // Генерация случайных значений для рейса
   const seats = Math.floor(Math.random() * 200) + 1;
   const freeSeats = Math.floor(Math.random() * seats) + 1;
   const price = Math.floor(Math.random() * 1000) + 1;
   const flightNumber = generateFlightNumber();
-  const time = generateRandomTime(date); // Передаем дату из запроса в функцию
+  const time = generateRandomTime(date); 
 
   const data = new Model({
     from: from,
@@ -34,7 +33,6 @@ router.post('/post', async (req, res) => {
   }
 });
 
-// Generate a random flight number
 function generateFlightNumber() {
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const digits = '0123456789';
@@ -51,9 +49,9 @@ function generateFlightNumber() {
   return flightNumber;
 }
 
-// Generate a random time based on the input date
-function generateRandomTime(date) {
-  const startTime = new Date(date);
+function generateRandomTime(dateString) {
+  const [day, month, year] = dateString.split('-');
+  const startTime = new Date(`${year}-${month}-${day}`);
   startTime.setHours(startTime.getHours() + Math.floor(Math.random() * 12) + 1);
 
   const endTime = new Date(startTime);
@@ -66,7 +64,6 @@ function generateRandomTime(date) {
 }
 
 
-// Get all Method
 router.get('/getAll', async (req, res) => {
   try {
     const allData = await Model.find();
@@ -76,7 +73,6 @@ router.get('/getAll', async (req, res) => {
   }
 });
 
-// Get by ID Method
 router.get('/getOne/:id', async (req, res) => {
   try {
     const data = await Model.findById(req.params.id);
@@ -89,7 +85,7 @@ router.get('/getOne/:id', async (req, res) => {
   }
 });
 
-// Update by ID Method
+
 router.patch('/update/:id', async (req, res) => {
   try {
     const data = await Model.findByIdAndUpdate(req.params.id, req.body, {
@@ -104,7 +100,7 @@ router.patch('/update/:id', async (req, res) => {
   }
 });
 
-// Delete by ID Method
+
 router.delete('/delete/:id', async (req, res) => {
   try {
     const data = await Model.findByIdAndDelete(req.params.id);
