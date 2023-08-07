@@ -23,7 +23,7 @@ const app = express();
 app.use(bodyParser.json());
 
 const corsOptions = {
-    origin: 'http://localhost:4200',
+    origin: ['http://localhost:4200', 'https://64d15580ecae3730f58690bc--lively-gecko-128258.netlify.app'],
     optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
   };
   
