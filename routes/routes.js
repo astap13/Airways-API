@@ -19,11 +19,10 @@ router.get("/searchByDirection", async (req, res) => {
     const { from, to, date } = req.query;
 
     const flights = await Model.findOne({
-      from: new RegExp(from, "i"), 
-      to: new RegExp(to, "i"), 
-      date: new RegExp(date.split('T')[0]),
+      from: new RegExp(from, "i"),
+      to: new RegExp(to, "i"),
+      date: new RegExp(date.split("T")[0]),
     });
-
 
     res.status(200).json(flights);
   } catch (error) {
