@@ -1,70 +1,10 @@
-const express = require('express');
-const Model = require('../model/model');
+const express = require("express");
+const Model = require("../model/model");
 const router = express.Router();
 
 module.exports = router;
 
-// Post Method
-router.post('/post', async (req, res) => {
-  const { from, to, date } = req.body;
-
-  const seats = Math.floor(Math.random() * 200) + 1;
-  const freeSeats = Math.floor(Math.random() * seats) + 1;
-  const price = Math.floor(Math.random() * 1000) + 1;
-  const flightNumber = generateFlightNumber();
-  const time = generateRandomTime(date); 
-
-  const data = new Model({
-    from: from,
-    to: to,
-    date: time.from,
-    seats: seats,
-    freeSeats: freeSeats,
-    price: price,
-    flightNumber: flightNumber,
-    time: time,
-  });
-
-  try {
-    const savedData = await data.save();
-    res.status(200).json(savedData);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-function generateFlightNumber() {
-  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const digits = '0123456789';
-  let flightNumber = '';
-
-  for (let i = 0; i < 3; i++) {
-    flightNumber += letters.charAt(Math.floor(Math.random() * letters.length));
-  }
-
-  for (let i = 0; i < 3; i++) {
-    flightNumber += digits.charAt(Math.floor(Math.random() * digits.length));
-  }
-
-  return flightNumber;
-}
-
-function generateRandomTime(dateString) {
-  const [day, month, year] = dateString.split('-');
-  const startTime = new Date(`${year}-${month}-${day}`);
-  startTime.setHours(startTime.getHours() + Math.floor(Math.random() * 12) + 1);
-
-  const endTime = new Date(startTime);
-  endTime.setHours(startTime.getHours() + Math.floor(Math.random() * 12) + 1);
-
-  return {
-    from: startTime,
-    to: endTime,
-  };
-}
-
-
-router.get('/getAll', async (req, res) => {
+router.get("/getAll", async (req, res) => {
   try {
     const allData = await Model.find();
     res.status(200).json(allData);
@@ -73,41 +13,38 @@ router.get('/getAll', async (req, res) => {
   }
 });
 
-router.get('/getOne/:id', async (req, res) => {
+// Маршрут для поиска рейсов по направлению и дате
+router.get("/searchByDirection", async (req, res) => {
   try {
-    const data = await Model.findById(req.params.id);
-    if (!data) {
-      return res.status(404).json({ message: 'Data not found' });
-    }
-    res.status(200).json(data);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+    const { from, to, date } = req.query;
 
-
-router.patch('/update/:id', async (req, res) => {
-  try {
-    const data = await Model.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
+    const flights = await Model.findOne({
+      from: new RegExp(from, "i"), 
+      to: new RegExp(to, "i"), 
+      date: new RegExp(date.split('T')[0]),
     });
-    if (!data) {
-      return res.status(404).json({ message: 'Data not found' });
-    }
-    res.status(200).json(data);
+
+
+    res.status(200).json(flights);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-
-router.delete('/delete/:id', async (req, res) => {
+// Маршрут для поиска рейса по номеру рейса
+router.get("/searchByFlightNumber/:flightNumber", async (req, res) => {
   try {
-    const data = await Model.findByIdAndDelete(req.params.id);
-    if (!data) {
-      return res.status(404).json({ message: 'Data not found' });
+    const flightNumber = req.params.flightNumber;
+
+    const flight = await Model.findOne({
+      flightNumber: flightNumber,
+    });
+
+    if (!flight) {
+      return res.status(404).json({ message: "Flight not found" });
     }
-    res.status(200).json({ message: 'Data deleted' });
+
+    res.status(200).json(flight);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

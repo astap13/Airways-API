@@ -10,7 +10,7 @@ const dataSchema = new mongoose.Schema({
     required: true,
   },
   date: {
-    type: Date,
+    type: String,
     required: true,
   },
   seats: {
@@ -41,4 +41,4 @@ const dataSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Data", dataSchema);
+module.exports = mongoose.model("flights", dataSchema);

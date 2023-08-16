@@ -30,6 +30,7 @@ const corsOptions = {
   app.use(cors(corsOptions));
 
 app.use('/', routes);
+app.use('/flights', routes);
 
 app.listen(3000, () => {
     console.log(`Server Started at ${3000}`)
