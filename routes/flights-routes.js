@@ -2,11 +2,13 @@ const express = require("express");
 const Model = require("../model/model");
 const router = express.Router();
 
+const { FlightModel } = require("../model/model");
+
 module.exports = router;
 
 router.get("/getAll", async (req, res) => {
   try {
-    const allData = await Model.find();
+    const allData = await FlightModel.find();
     res.status(200).json(allData);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -18,7 +20,7 @@ router.get("/searchByDirection", async (req, res) => {
   try {
     const { from, to, date } = req.query;
 
-    const flights = await Model.findOne({
+    const flights = await FlightModel.findOne({
       from: new RegExp(from, "i"),
       to: new RegExp(to, "i"),
       date: new RegExp(date.split("T")[0]),
@@ -35,7 +37,7 @@ router.get("/searchByFlightNumber/:flightNumber", async (req, res) => {
   try {
     const flightNumber = req.params.flightNumber;
 
-    const flight = await Model.findOne({
+    const flight = await FlightModel.findOne({
       flightNumber: flightNumber,
     });
 

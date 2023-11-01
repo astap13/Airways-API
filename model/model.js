@@ -1,6 +1,22 @@
 const mongoose = require("mongoose");
 
-const dataSchema = new mongoose.Schema({
+const passengersItemSchema = new mongoose.Schema({
+  ageGroup: String,
+  firstName: String,
+  lastName: String,
+  gender: String,
+  birthDate: mongoose.Schema.Types.Mixed,
+});
+
+const cartItemSchema = new mongoose.Schema({
+  flightId: String,
+  passengers: {
+    type: [passengersItemSchema],
+    required: true,
+  },
+});
+
+const flightDataSchema = new mongoose.Schema({
   from: {
     type: String,
     required: true,
@@ -41,4 +57,21 @@ const dataSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("flights", dataSchema);
+const userDataSchema = new mongoose.Schema({
+  uid: {
+    type: String,
+    required: true,
+  },
+  cart: {
+    type: [cartItemSchema],
+    required: true,
+  },
+});
+
+const FlightModel = mongoose.model("flights", flightDataSchema);
+const UserModel = mongoose.model("users", userDataSchema);
+
+module.exports = {
+  FlightModel,
+  UserModel,
+};

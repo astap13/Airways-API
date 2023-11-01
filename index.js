@@ -3,7 +3,8 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const mongoString = process.env.DATABASE_URL;
-const routes = require("./routes/routes");
+const flightRoutes = require("./routes/flights-routes");
+const userRoutes = require("./routes/users-routes");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
@@ -31,8 +32,9 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.use("/", routes);
-app.use("/flights", routes);
+app.use("/", flightRoutes);
+app.use("/flights", flightRoutes);
+app.use('/user', userRoutes);
 
 app.listen(3000, () => {
   console.log(`Server Started at ${3000}`);
