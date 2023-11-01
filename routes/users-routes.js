@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
     const existingUser = await UserModel.findOne({ uid });
 
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      res.status(200).json(existingUser);
     }
 
     const newUser = new UserModel({ uid });
