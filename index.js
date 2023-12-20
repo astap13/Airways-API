@@ -26,6 +26,7 @@ const corsOptions = {
     "http://localhost:4200",
     "localhost:4200",
     "https://64d15580ecae3730f58690bc--lively-gecko-128258.netlify.app",
+    "https://airways-in-progress.netlify.app",
   ],
   optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
 };
@@ -34,7 +35,7 @@ app.use(cors(corsOptions));
 
 app.use("/", flightRoutes);
 app.use("/flights", flightRoutes);
-app.use('/user', userRoutes);
+app.use("/user", userRoutes);
 
 app.listen(3000, () => {
   console.log(`Server Started at ${3000}`);
