@@ -4,29 +4,29 @@ const { UserModel } = require("../model/model");
 
 module.exports = router;
 
-// Получение информации о пользователе по UID
-async getUserInfo() {
-  const user = JSON.parse(localStorage.getItem('user'));
+// // Получение информации о пользователе по UID
+// async getUserInfo() {
+//   const user = JSON.parse(localStorage.getItem('user'));
 
-  if (!user || !user.uid) {
-    // Обработка случая, когда информация о пользователе отсутствует или некорректна
-    console.error('User information is missing or invalid');
-    return; // или выполните другие действия по обработке ошибки
-  }
+//   if (!user || !user.uid) {
+//     // Обработка случая, когда информация о пользователе отсутствует или некорректна
+//     console.error('User information is missing or invalid');
+//     return; // или выполните другие действия по обработке ошибки
+//   }
 
-  const uid = user.uid;
-  const url = `https://airways-api-ckd3.onrender.com/user/${uid}`;
+//   const uid = user.uid;
+//   const url = `https://airways-api-ckd3.onrender.com/user/${uid}`;
 
-  try {
-    const response = await this.http.get(url).toPromise();
-    // Обработка данных ответа, если это необходимо
-    console.log(response);
-  } catch (error) {
-    // Обработка ошибок
-    console.error('Error fetching user data:', error);
-    // Выполните дополнительные действия по обработке ошибок
-  }
-}
+//   try {
+//     const response = await this.http.get(url).toPromise();
+//     // Обработка данных ответа, если это необходимо
+//     console.log(response);
+//   } catch (error) {
+//     // Обработка ошибок
+//     console.error('Error fetching user data:', error);
+//     // Выполните дополнительные действия по обработке ошибок
+//   }
+// }
 
 // Создание нового пользователя
 router.post("/", async (req, res) => {
